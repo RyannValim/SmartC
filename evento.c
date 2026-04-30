@@ -6,6 +6,7 @@ do projeto; todos os outros arquivos dependem deste.
 #include "evento.h"
 #include <stdio.h>
 
+// consulta o tipo de um evento e retorna como string
 const char* getTipoEventoString(TipoEvento tipo){
     switch(tipo){
     case ACIDENTE_DE_TRANSITO:
@@ -23,6 +24,7 @@ const char* getTipoEventoString(TipoEvento tipo){
     }
 }
 
+// consulta o status de um evento e retorna como string
 const char* getStatusString(Status status){
     switch(status){
         case ATIVO:
@@ -34,6 +36,7 @@ const char* getStatusString(Status status){
     }
 }
 
+// imprime as informações de um evento
 void imprimirEvento(Evento *e){
     printf("Id do Evento: %d\n", e->id_evento);
     printf("Tipo do Evento: %s\n", getTipoEventoString(e->tipo_evento));
