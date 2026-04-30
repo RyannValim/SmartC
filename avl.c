@@ -264,3 +264,32 @@ void listarPorIntervaloId(Evento *raiz, int idMin, int idMax){
         listarPorIntervaloId(raiz->dir, idMin, idMax);
     }
 }
+
+// atualiza o status de um evento pelo id do evento
+void atualizarStatus(Evento *raiz, int id){
+    if(raiz == NULL){
+        return;
+    }
+    Evento *no = buscarPorId(raiz, id);
+
+    if(no != NULL){
+        if(no->status != RESOLVIDO){
+            no->status = RESOLVIDO;
+        }
+    }
+}
+
+// atualiza a severidade de um evento pelo id do evento
+void atualizarSeveridade(Evento *raiz, int id, int novaSeveridade){
+    if(raiz == NULL){
+        return;
+    }
+
+    Evento *no = buscarPorId(raiz, id);
+
+    if(no != NULL){
+        if(novaSeveridade > 0 && novaSeveridade < 6){
+            no->severidade = novaSeveridade;
+        }
+    }
+}

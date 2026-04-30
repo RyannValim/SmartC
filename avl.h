@@ -28,4 +28,8 @@ void listarPorSeveridade(Evento *raiz, int min, int max);
 void listarPorRegiao(Evento *raiz, char *regiao);
 void listarPorIntervaloId(Evento *raiz, int idMin, int idMax);
 
+// operações de atualização
+void atualizarStatus(Evento *raiz, int id);
+void atualizarSeveridade(Evento *raiz, int id, int novaSeveridade);
+
 #endif
