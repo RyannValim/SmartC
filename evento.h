@@ -40,4 +40,6 @@ typedef struct evento{
     struct evento *dir;
 } Evento;
 
+void imprimirEvento(Evento *e);
+
 #endif
