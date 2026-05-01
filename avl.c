@@ -89,7 +89,7 @@ Evento *balancear(Evento *raiz){
         if(fatorBalanceamento(raiz->esq) >= 0){
             return rotacaoLL(raiz);
         } else{
-            return rotacaLR(raiz);
+            return rotacaoLR(raiz);
         }
     }
 
