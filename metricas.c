@@ -7,6 +7,7 @@ distinta, ele consulta sem modificar nada.
 
 #include "metricas.h"
 #include "avl.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 

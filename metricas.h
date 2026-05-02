@@ -7,6 +7,7 @@ distinta, ele consulta sem modificar nada.
 
 #ifndef METRICAS_H
 #define METRICAS_H
+
 #include "evento.h"
 
 // funções que competem às métricas

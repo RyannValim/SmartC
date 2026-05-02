@@ -4,7 +4,9 @@ inserção, remoção, busca, rotações e rebalanceamento. Não sabe nada
 de menu ou de como os dados chegam, só cuida da estrutura.
 */
 #include "avl.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 // padrões da estrutura Evento

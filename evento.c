@@ -4,6 +4,7 @@ a struct DateTime, e a struct do nó da AVL. É o vocabulário central
 do projeto; todos os outros arquivos dependem deste.
 */
 #include "evento.h"
+
 #include <stdio.h>
 
 // consulta o tipo de um evento e retorna como string
