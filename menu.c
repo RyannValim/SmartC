@@ -251,6 +251,13 @@ void exibirMenuEventos(Evento **raiz){
                     }
                 } while(novo->id_evento < 0);
 
+                // checando se o evento já existe
+                if(buscarPorId(*raiz, novo->id_evento) != NULL){
+                    printf("Ja existe um evento com este ID.\n");
+                    free(novo);
+                    break;
+                }
+
                 // coletando o campo tipo_evento e fazendo verificações
                 int tipo_evento = -1;
                 do{
@@ -312,8 +319,8 @@ void exibirMenuEventos(Evento **raiz){
 
                 *raiz = inserir(*raiz, novo);
                 break;
-            }   
-            case 2: {// Buscar um evento
+            }
+            case 2: { // Buscar por id
                 printf("\nInsira o id para busca: ");
                 int id_busca = lerInteiro();
 
@@ -329,17 +336,18 @@ void exibirMenuEventos(Evento **raiz){
             case 3: // Atualizar um evento
                 exibirMenuAtualizacao(raiz);
                 break;
-            case 4: {// Remoção
+            case 4: { // Remoção
                 printf("\nInsira o id do evento para remover: ");
                 int id_evento = lerInteiro();
-                *raiz = remover(*raiz, id_evento);
 
-                // confirmação da remoção
-                Evento *antes = *raiz;
+                Evento *encontrado = buscarPorId(*raiz, id_evento);
 
-                if(*raiz == antes){
+                if(encontrado == NULL){
+                    printf("Evento nao encontrado.\n");
+                } else if(encontrado->status == ATIVO){
                     printf("Evento nao pode ser removido. Status ainda esta ativo.\n");
-                } else{
+                } else {
+                    *raiz = remover(*raiz, id_evento);
                     printf("Evento removido com sucesso!\n");
                 }
                 break;
@@ -371,7 +379,7 @@ void exibirMenuConsultas(Evento **raiz){
 
                 int encontrados = listarPorSeveridade(*raiz, min, max);
                 if(encontrados == 0){
-                    printf("Nenhum evento ativo encontrado pela severidade informada.\n");
+                    printf("\nNenhum evento ativo encontrado pela severidade informada.\n");
                 }
                 
                 break;
@@ -382,7 +390,7 @@ void exibirMenuConsultas(Evento **raiz){
 
                 int encontrados = listarPorRegiao(*raiz, regiao);
                 if(encontrados == 0){
-                    printf("Nenhum evento ativo encontrado para a regiao informada.\n");
+                    printf("\nNenhum evento ativo encontrado para a regiao informada.\n");
                 }
                 break;
             }
@@ -395,7 +403,7 @@ void exibirMenuConsultas(Evento **raiz){
 
                 int encontrados = listarPorIntervaloId(*raiz, id_min, id_max);
                 if(encontrados == 0){
-                    printf("Nenhum evento ativo encontrado neste intervalo de IDs.\n");
+                    printf("\nNenhum evento foi encontrado neste intervalo de IDs.\n");
                 }
                 break;
             }
