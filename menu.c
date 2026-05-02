@@ -78,9 +78,9 @@ void limparBuffer(){
 // função auxiliar para ler inteiros
 int lerInteiro(){
     int inteiro;
-    while(scanf("%d", &inteiro) != 1){  /* != 1 significa que falhou */
+    while(scanf("%d", &inteiro) != 1){
         limparBuffer();
-        printf("Insira um numero do menu: ");
+        printf("Entrada invalida. Insira um numero: ");
     }
     limparBuffer();
     return inteiro;
