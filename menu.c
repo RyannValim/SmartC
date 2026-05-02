@@ -428,15 +428,31 @@ void exibirMenuAtualizacao(Evento **raiz){
             case 1: {
                 printf("Insira o id do evento para atualizar: ");
                 int id = lerInteiro();
-                atualizarStatus(*raiz, id);
+                Evento *no = buscarPorId(*raiz, id);
+                if(no == NULL){
+                    printf("Evento nao encontrado.\n");
+                } else if(no->status == RESOLVIDO){
+                    printf("Evento ja esta com status Resolvido.\n");
+                } else {
+                    atualizarStatus(*raiz, id);
+                    printf("Status atualizado para Resolvido.\n");
+                }
                 break;
             }
             case 2: {
                 printf("Insira o id do evento: ");
                 int id = lerInteiro();
-                printf("Nova severidade (1 a 5): ");
-                int novaSeveridade = lerInteiro();
-                atualizarSeveridade(*raiz, id, novaSeveridade);
+                Evento *no = buscarPorId(*raiz, id);
+                if(no == NULL){
+                    printf("Evento nao encontrado.\n");
+                } else if(no->status == RESOLVIDO){
+                    printf("Nao e possivel alterar severidade de evento Resolvido.\n");
+                } else {
+                    printf("Nova severidade (1 a 5): ");
+                    int novaSeveridade = lerInteiro();
+                    atualizarSeveridade(*raiz, id, novaSeveridade);
+                    printf("Severidade atualizada com sucesso.\n");
+                }
                 break;
             }
             default:
