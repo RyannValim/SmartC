@@ -26,9 +26,9 @@ Evento *remover(Evento *raiz, int id);
 void freeTree(Evento *raiz);
 
 // consultas avançadas de Evento
-void listarPorSeveridade(Evento *raiz, int min, int max);
-void listarPorRegiao(Evento *raiz, char *regiao);
-void listarPorIntervaloId(Evento *raiz, int idMin, int idMax);
+int listarPorSeveridade(Evento *raiz, int min, int max);
+int listarPorRegiao(Evento *raiz, char *regiao);
+int listarPorIntervaloId(Evento *raiz, int idMin, int idMax);
 
 // operações de atualização
 void atualizarStatus(Evento *raiz, int id);

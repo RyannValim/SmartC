@@ -208,63 +208,71 @@ Evento *remover(Evento *raiz, int id){
 
 // consultar avançadas de Evento
 // percorre a árvore em-ordem e lista os eventos ativos e dentro do range de severidade
-void listarPorSeveridade(Evento *raiz, int min, int max){
+int listarPorSeveridade(Evento *raiz, int min, int max){
     // caso base
     if(raiz == NULL){
-        return;
+        return 0;
     }
 
     // percorre a árvore em-ordem
-    listarPorSeveridade(raiz->esq, min, max);
+    int encontrados = 0;
+    encontrados += listarPorSeveridade(raiz->esq, min, max);
 
     if(raiz->status == ATIVO){
         if(raiz->severidade >= min && raiz->severidade <= max){
             imprimirEvento(raiz);
+            encontrados++;
         }
     }
 
-    listarPorSeveridade(raiz->dir, min, max);
+    encontrados += listarPorSeveridade(raiz->dir, min, max);
+    return encontrados;
 }
 
 // percorre a árvore em-ordem e lista os eventos pela região
-void listarPorRegiao(Evento *raiz, char *regiao){
-    // caso base
-    if(raiz == NULL){
-        return;
+int listarPorRegiao(Evento *raiz, char *regiao){
+    if(raiz == NULL) {
+        return 0;
     }
 
-    // percorre a árvore em-ordem
-    listarPorRegiao(raiz->esq, regiao);
+    // percorre a árvore em ordem realizando a contagem dos encontrados
+    int encontrados = 0;
+    encontrados += listarPorRegiao(raiz->esq, regiao);
 
-    if(raiz->status == ATIVO){
-        if(strcmp(raiz->regiao, regiao) == 0){
-            imprimirEvento(raiz);
-        }
+    if(raiz->status == ATIVO && strcmp(raiz->regiao, regiao) == 0){
+        imprimirEvento(raiz);
+        encontrados++;
     }
 
-    listarPorRegiao(raiz->dir, regiao);
+    encontrados += listarPorRegiao(raiz->dir, regiao);
+    return encontrados;
 }
 
 // lista os eventos por um intervalo de ids
-void listarPorIntervaloId(Evento *raiz, int idMin, int idMax){
+int listarPorIntervaloId(Evento *raiz, int idMin, int idMax){
     // caso base
     if(raiz == NULL){
-        return;
+        return 0;
     }
     
     // limita a busca pelo id mínimo para melhor eficiência
-    if(raiz->id_evento > idMin){
-        listarPorIntervaloId(raiz->esq, idMin, idMax);
+    int encontrados = 0;
+    
+    if(raiz->id_evento >= idMin){
+        encontrados += listarPorIntervaloId(raiz->esq, idMin, idMax);
     }
 
     if(raiz->id_evento >= idMin && raiz->id_evento <= idMax){
         imprimirEvento(raiz);
+        encontrados++;
     }
 
     // limita a busca pelo id máximo para melhor eficiência
-    if(raiz->id_evento < idMax){
-        listarPorIntervaloId(raiz->dir, idMin, idMax);
+    if(raiz->id_evento <= idMax){
+        encontrados += listarPorIntervaloId(raiz->dir, idMin, idMax);
     }
+
+    return encontrados;
 }
 
 // atualiza o status de um evento pelo id do evento

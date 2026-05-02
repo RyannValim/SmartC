@@ -39,12 +39,12 @@ const char* getStatusString(Status status){
 
 // imprime as informações de um evento
 void imprimirEvento(Evento *e){
-    printf("Id do Evento: %d\n", e->id_evento);
+    printf("\n======= EVENTO DE ID %d =======\n", e->id_evento);
     printf("Tipo do Evento: %s\n", getTipoEventoString(e->tipo_evento));
     printf("Nivel de Severidade: %d\n", e->severidade);
     printf("Data/Hora: %02d/%02d/%04d %02d:%02d:%02d\n", 
         e->datetime.dia, e->datetime.mes, e->datetime.ano,
         e->datetime.hora, e->datetime.minuto, e->datetime.segundo);
-    printf("Região: %s\n", e->regiao);
+    printf("Regiao: %s\n", e->regiao);
     printf("Status: %s\n", getStatusString(e->status));
 }

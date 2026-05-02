@@ -55,9 +55,10 @@ float fatorBalanceamentoMedio(Evento *raiz){
 }
 
 void exibirMetricas(Evento *raiz){
+    printf("\n======= METRICAS DA ARVORE DE EVENTOS =======\n");
     printf("Altura da Arvore: %d\n", altura(raiz));
     printf("Total de Eventos: %d\n", totalNos(raiz));
     printf("Total de Eventos Ativos: %d\n", totalAtivos(raiz));
     printf("Fator de Balanceamento medio: %f\n", fatorBalanceamentoMedio(raiz));
-    printf("Total de Rotacoes: %d\n", totalRotacoes);
+    printf("Total de Rotacoes: %d\n\n", totalRotacoes);
 }

@@ -8,6 +8,7 @@ operações do usuário.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 // opções para o menu inicial
@@ -19,11 +20,12 @@ void opcoesIniciais(){
     printf("|                                |\n");
     printf("|     0. Sair                    |\n");
     printf("==================================\n");
+    printf("Escolha:  ");
 }
 
 // opções para o menu de evento
 void opcoesEventos(){
-    printf("======== SMARTC - EVENTOS ========\n");
+    printf("\n======== SMARTC - EVENTOS ========\n");
     printf("|     1. Inserir                 |\n");
     printf("|     2. Buscar (por ID)         |\n");
     printf("|     3. Atualizar               |\n");
@@ -31,36 +33,40 @@ void opcoesEventos(){
     printf("|                                |\n");
     printf("|     0. Voltar                  |\n");
     printf("==================================\n");
+    printf("Escolha:  ");
 }
 
 // opções para o menu de consulta
 void opcoesConsultas(){
-    printf("======= SMARTC - CONSULTAS =======\n");
+    printf("\n======= SMARTC - CONSULTAS =======\n");
     printf("|     1. Listar por Severidade   |\n");
     printf("|     2. Listar por Regiao       |\n");
     printf("|     3. Listar por Intervalo    |\n");
     printf("|                                |\n");
     printf("|     0. Voltar                  |\n");
     printf("==================================\n");
+    printf("Escolha:  ");
 }
 
 // opções para o menu de atualização
 void opcoesAtualizacao(){
-    printf("====== SMARTC - ATUALIZACAO ======\n");
+    printf("\n====== SMARTC - ATUALIZACAO ======\n");
     printf("|     1. Atualizar Status        |\n");
     printf("|     2. Atualizar Severidade    |\n");
     printf("|                                |\n");
     printf("|     0. Voltar                  |\n");
     printf("==================================\n");
+    printf("Escolha:  ");
 }
 
 // opções para o menu de métricas
 void opcoesMetricas(){
-    printf("======== SMARTC - METRICAS =======\n");
+    printf("\n======== SMARTC - METRICAS =======\n");
     printf("|     1. Exibir Metricas         |\n");
     printf("|                                |\n");
     printf("|     0. Voltar                  |\n");
     printf("==================================\n");
+    printf("Escolha:  ");
 }
 
 // função auxiliar de limpeza de buffer
@@ -72,16 +78,23 @@ void limparBuffer(){
 // função auxiliar para ler inteiros
 int lerInteiro(){
     int inteiro;
-    scanf("%d", &inteiro);
+    while(scanf("%d", &inteiro) != 1){  /* != 1 significa que falhou */
+        limparBuffer();
+        printf("Insira um numero do menu: ");
+    }
     limparBuffer();
     return inteiro;
 }
 
 // função auxiliar para ler strings
 void lerRegiao(char *destino){
-    printf("Regiao: ");
-    scanf("%34[^\n]", destino); // 34 pois TAM_REGIAO = 35
-    limparBuffer();
+    printf("Insira a regiao: ");
+    fgets(destino, TAM_REGIAO, stdin);
+    // remove o \n que fgets inclui no final
+    int len = strlen(destino);
+    if(len > 0 && destino[len-1] == '\n'){
+        destino[len-1] = '\0';
+    }
 }
 
 // função para ler datetime
@@ -213,7 +226,7 @@ void exibirMenuEventos(Evento **raiz){
 
     do{
         opcoesEventos();
-        scanf("%d", &opcaoEvento);
+        opcaoEvento = lerInteiro();
 
         switch(opcaoEvento){
             case 0:
@@ -226,7 +239,7 @@ void exibirMenuEventos(Evento **raiz){
                 novo->altura = 0;
 
                 // coletando os campos
-                printf("Preencha os dados do novo evento:\n");
+                printf("\nPreencha os dados do novo evento:\n");
 
                 // coletando id_evento e fazendo verificações
                 do{
@@ -301,7 +314,7 @@ void exibirMenuEventos(Evento **raiz){
                 break;
             }   
             case 2: {// Buscar um evento
-                printf("Insira o id para busca: ");
+                printf("\nInsira o id para busca: ");
                 int id_busca = lerInteiro();
 
                 Evento *encontrado = buscarPorId(*raiz, id_busca);
@@ -317,13 +330,22 @@ void exibirMenuEventos(Evento **raiz){
                 exibirMenuAtualizacao(raiz);
                 break;
             case 4: {// Remoção
-                printf("Insira o id do evento para remover: ");
+                printf("\nInsira o id do evento para remover: ");
                 int id_evento = lerInteiro();
                 *raiz = remover(*raiz, id_evento);
+
+                // confirmação da remoção
+                Evento *antes = *raiz;
+
+                if(*raiz == antes){
+                    printf("Evento nao pode ser removido. Status ainda esta ativo.\n");
+                } else{
+                    printf("Evento removido com sucesso!\n");
+                }
                 break;
             }
             default:
-                printf("Opacao invalida, tente novamente!\n");
+                printf("\nOpcao invalida, tente novamente!\n");
                 break;
         }
     } while(opcaoEvento != 0);
@@ -335,7 +357,7 @@ void exibirMenuConsultas(Evento **raiz){
 
     do{
         opcoesConsultas();
-        scanf("%d", &opcaoConsulta);
+        opcaoConsulta = lerInteiro();
 
         switch(opcaoConsulta){
             case 0:
@@ -347,15 +369,21 @@ void exibirMenuConsultas(Evento **raiz){
                 printf("Insira o valor maximo: ");
                 int max = lerInteiro();
 
-                listarPorSeveridade(*raiz, min, max);
+                int encontrados = listarPorSeveridade(*raiz, min, max);
+                if(encontrados == 0){
+                    printf("Nenhum evento ativo encontrado pela severidade informada.\n");
+                }
+                
                 break;
             }
             case 2: { // listar por regiao
-                printf("Insira a regiao: ");
                 char regiao[TAM_REGIAO];
                 lerRegiao(regiao);
 
-                listarPorRegiao(*raiz, regiao);
+                int encontrados = listarPorRegiao(*raiz, regiao);
+                if(encontrados == 0){
+                    printf("Nenhum evento ativo encontrado para a regiao informada.\n");
+                }
                 break;
             }
             case 3: { // listar por intervalo de id
@@ -365,7 +393,10 @@ void exibirMenuConsultas(Evento **raiz){
                 printf("Insira o id maximo do intervalo: ");
                 int id_max = lerInteiro();
 
-                listarPorIntervaloId(*raiz, id_min, id_max);
+                int encontrados = listarPorIntervaloId(*raiz, id_min, id_max);
+                if(encontrados == 0){
+                    printf("Nenhum evento ativo encontrado neste intervalo de IDs.\n");
+                }
                 break;
             }
             default:
@@ -381,7 +412,7 @@ void exibirMenuAtualizacao(Evento **raiz){
 
     do{
         opcoesAtualizacao();
-        scanf("%d", &opcaoAtualizacao);
+        opcaoAtualizacao = lerInteiro();
         
         switch(opcaoAtualizacao){
             case 0:
@@ -413,7 +444,7 @@ void exibirMenuMetricas(Evento **raiz){
 
     do{
         opcoesMetricas();
-        scanf("%d", &opcaoMetrica);
+        opcaoMetrica = lerInteiro();
 
         switch(opcaoMetrica){
             case 0:
@@ -432,26 +463,28 @@ void exibirMenuPrincipal(Evento **raiz){
     int opcaoSwitch;
     do{
         opcoesIniciais();
-        printf("Sua escolha: ");
-        scanf("%d", &opcaoSwitch);
+        opcaoSwitch = lerInteiro();
 
         switch(opcaoSwitch){
             case 0:
                 break;
             case 1: // opcao de eventos
                 exibirMenuEventos(raiz);
+                printf("\n");
                 break;
             case 2: // opcao de consultas
                 exibirMenuConsultas(raiz);
+                printf("\n");
                 break;
             case 3: // opcao de metricas
                 exibirMenuMetricas(raiz);
+                printf("\n");
                 break;
             default:
-                printf("Opcao invalida. Tente novamente!\n");
+                printf("\nOpcao invalida. Tente novamente!\n");
                 break;
         }
     } while(opcaoSwitch != 0);
 
-    printf("Encerrando o programa!\n");
+    printf("\nEncerrando o programa...\n\nAte uma proxima!\n");
 }
