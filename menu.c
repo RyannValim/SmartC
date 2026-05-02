@@ -90,11 +90,14 @@ int lerInteiro(){
 void lerRegiao(char *destino){
     printf("Insira a regiao: ");
     fgets(destino, TAM_REGIAO, stdin);
+
     // remove o \n que fgets inclui no final
     int len = strlen(destino);
     if(len > 0 && destino[len-1] == '\n'){
         destino[len-1] = '\0';
     }
+
+    limparBuffer();
 }
 
 // função para ler datetime
@@ -259,7 +262,7 @@ void exibirMenuEventos(Evento **raiz){
                 }
 
                 // coletando o campo tipo_evento e fazendo verificações
-                int tipo_evento = -1;
+                int tipo_evento = 0;
                 do{
                     printf("Tipo (ex: 1: ACIDENTE DE TRANSITO, 2: FALHA EM SEMAFORO, 3: INTERRUPCAO DE ENERGIA, 4: ALAGAMENTO, 5: INCENDIO): ");
                     tipo_evento = lerInteiro();
@@ -284,7 +287,7 @@ void exibirMenuEventos(Evento **raiz){
                             printf("Insira um valor dentro do intervalo correto entre 1 e 5.\n");
                             break;
                     }
-                } while(tipo_evento == -1);
+                } while(tipo_evento < 1 || tipo_evento > 5);
 
                 // coletando o campo severidade e fazendo verificações
                 do{
@@ -317,7 +320,13 @@ void exibirMenuEventos(Evento **raiz){
                     }
                 } while(status_evento != 1 && status_evento != 2);
 
-                *raiz = inserir(*raiz, novo);
+                if(novo != NULL){
+                    *raiz = inserir(*raiz, novo);
+                    printf("O evento foi inserido com sucesso!\n");
+                } else {
+                    printf("O evento não pode ser inserido, tente novamente.\n");
+                }
+                
                 break;
             }
             case 2: { // Buscar por id
