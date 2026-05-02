@@ -11,6 +11,7 @@ de menu ou de como os dados chegam, só cuida da estrutura.
 // padrões da estrutura Evento
 extern int totalRotacoes;
 
+// itens que competem à arvore
 int altura(Evento *no);
 int fatorBalanceamento(Evento *no);
 Evento *rotacaoLL(Evento *raiz);
@@ -22,6 +23,7 @@ Evento *inserir(Evento *raiz, Evento *novo);
 Evento *buscarPorId(Evento *raiz, int id);
 Evento *menorNo(Evento *raiz);
 Evento *remover(Evento *raiz, int id);
+void freeTree(Evento *raiz);
 
 // consultas avançadas de Evento
 void listarPorSeveridade(Evento *raiz, int min, int max);

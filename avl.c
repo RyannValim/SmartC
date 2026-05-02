@@ -295,3 +295,14 @@ void atualizarSeveridade(Evento *raiz, int id, int novaSeveridade){
         }
     }
 }
+
+// libera a árvore inteira
+void freeTree(Evento *raiz){
+    if(raiz == NULL){
+        return;
+    }
+
+    freeTree(raiz->esq);
+    freeTree(raiz->dir);
+    free(raiz);
+}
